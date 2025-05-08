@@ -1,0 +1,48 @@
+# decrypt_benchmark.manifest.template
+loader.entrypoint.uri = "file:{{ gramine.libos }}"
+libos.entrypoint = "/decrypt_benchmark"
+
+loader.log_level = "{{ log_level }}"
+
+loader.env.LD_LIBRARY_PATH = "/lib:/usr/lib:{{ arch_libdir }}:/usr/{{ arch_libdir }}:/usr/local/lib"
+
+# Include all required OpenFHE libraries in the trusted section
+fs.mounts = [
+  { path = "/lib", uri = "file:{{ gramine.runtimedir() }}" },
+  { path = "{{ arch_libdir }}", uri = "file:{{ arch_libdir }}" },
+  { path = "/usr/{{ arch_libdir }}", uri = "file:/usr/{{ arch_libdir }}" },
+  { path = "/usr/lib", uri = "file:/usr/lib" },
+  { path = "/decrypt_benchmark", uri = "file:decrypt_benchmark" },
+  # Add OpenFHE library paths
+  { path = "/usr/local/lib", uri = "file:/usr/local/lib" },
+  { path = "/usr/local/include", uri = "file:/usr/local/include" },
+]
+
+# SGX specific settings
+sgx.debug = true
+sgx.edmm_enable = {{ 'true' if env.get('EDMM', '0') == '1' else 'false' }}
+sgx.enclave_size = "2G"
+sgx.max_threads = 16
+
+# Include the OpenFHE libraries in the trusted files
+sgx.trusted_files = [
+  "file:{{ gramine.libos }}",
+  "file:decrypt_benchmark",
+  "file:{{ gramine.runtimedir() }}/",
+  "file:{{ arch_libdir }}/",
+  "file:/usr/{{ arch_libdir }}/",
+  "file:/usr/lib/",
+  # OpenFHE libraries
+  "file:/usr/local/lib/libOPENFHEbinfhe.so.1",
+  "file:/usr/local/lib/libOPENFHEcore.so.1",
+  "file:/usr/local/lib/libOPENFHEpke.so.1",
+  "file:/usr/local/lib/libOPENFHEbinfhe.so",
+  "file:/usr/local/lib/libOPENFHEcore.so",
+  "file:/usr/local/lib/libOPENFHEpke.so",
+]
+
+# Allow writing to stdout/stderr
+sgx.allowed_files = [
+  "file:/dev/stdout",
+  "file:/dev/stderr"
+]

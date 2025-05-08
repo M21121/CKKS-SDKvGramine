@@ -1,0 +1,56 @@
+# Build artifacts
+*.o
+*.so
+*.a
+*.lo
+*.la
+*.dylib
+*.dll
+*.exe
+*.out
+
+# SGX specific files
+*.manifest
+*.manifest.sgx
+*.sig
+*.token
+*.signed.so
+enclave.signed.so
+enclave.so
+*.pem
+
+# Generated files
+Enclave_t.c
+Enclave_t.h
+Enclave_u.c
+Enclave_u.h
+App/Enclave_u.*
+Enclave/Enclave_t.*
+
+# Benchmark binaries
+/Gramine/encrypt_benchmark
+/Gramine/decrypt_benchmark
+/SDK/ckks_app
+
+# Key files
+*.bin
+*_key.bin
+
+# Temporary files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+*.txt
+
+# CMake build directories
+build/
+cmake-build-*/
+
+# Dependency directories
+node_modules/
+vendor/
+
+# Log files
+*.log
