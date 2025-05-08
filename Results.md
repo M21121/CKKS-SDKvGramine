@@ -1,4 +1,4 @@
-| **Framework** | **Encrypt Time per Operation (ms)** | **Decrypt Time per Operation (ms)** |
+| **Framework** | **Average Encrypt Time (ms)** | **Average Decrypt Time (ms)** |
 |---------------|-------------------------------------|-------------------------------------|
 | SDK           | 1554.66                            | 799.03                             |
 | Gramine       | 0.03                               | 0.04                               |
