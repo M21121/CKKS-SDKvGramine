@@ -2,6 +2,7 @@
 #include "openfhe.h"
 #include <chrono>
 #include <iostream>
+#include <iomanip>
 
 using namespace lbcrypto;
 using namespace std::chrono;
@@ -31,6 +32,36 @@ int main(int argc, char* argv[]) {
 
     Plaintext plaintext = cryptoContext->MakeCKKSPackedPlaintext(vectorOfDoubles);
 
+    // Print input values (first 10 elements)
+    std::cout << "\nInput values (first 10 elements):" << std::endl;
+    for (int i = 0; i < 10; i++) {
+        std::cout << std::fixed << std::setprecision(2) << vectorOfDoubles[i] << " ";
+    }
+    std::cout << "..." << std::endl;
+
+    // Encrypt the plaintext
+    auto ciphertext = cryptoContext->Encrypt(keyPair.publicKey, plaintext);
+
+    // Print some information about the ciphertext
+    std::cout << "\nEncrypted ciphertext:" << std::endl;
+    std::cout << "Ciphertext size: " << ciphertext->GetElements().size() << " elements" << std::endl;
+    std::cout << "First element size: " << ciphertext->GetElements()[0].GetLength() << " coefficients" << std::endl;
+
+    // Decrypt to verify
+    Plaintext decryptedPlaintext;
+    cryptoContext->Decrypt(keyPair.secretKey, ciphertext, &decryptedPlaintext);
+
+    // Print decrypted values
+    std::vector<double> decryptedVector;
+    decryptedPlaintext->SetLength(vectorOfDoubles.size());
+    decryptedVector = decryptedPlaintext->GetRealPackedValue();
+
+    std::cout << "\nDecrypted values (first 10 elements):" << std::endl;
+    for (int i = 0; i < 10; i++) {
+        std::cout << std::fixed << std::setprecision(2) << decryptedVector[i] << " ";
+    }
+    std::cout << "..." << std::endl;
+
     // Run benchmark
     auto start = high_resolution_clock::now();
 
@@ -42,7 +73,7 @@ int main(int argc, char* argv[]) {
     auto duration = duration_cast<milliseconds>(end - start).count();
 
     // Output results
-    std::cout << "Encryption benchmark results:" << std::endl;
+    std::cout << "\nEncryption benchmark results:" << std::endl;
     std::cout << "Total time: " << duration << " ms" << std::endl;
     std::cout << "Average time per encryption: " << (double)duration / iterations << " ms" << std::endl;
     std::cout << "Operations per second: " << (iterations * 1000.0) / duration << std::endl;

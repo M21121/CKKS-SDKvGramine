@@ -17,6 +17,12 @@ echo "Iterations: $ITERATIONS"
 echo "Warm-up Iterations: $WARMUP_ITERATIONS"
 echo "=============================================="
 
+# Check if SGX is enabled and manifest files exist
+SGX_ENABLED=0
+if [ -f "./encrypt_benchmark.manifest.sgx" ] && [ -f "./decrypt_benchmark.manifest.sgx" ]; then
+    SGX_ENABLED=1
+fi
+
 # Function to run benchmark for a specific mode
 run_benchmark() {
     local mode=$1
@@ -28,17 +34,34 @@ run_benchmark() {
         binary="./decrypt_benchmark"
     fi
 
+    # First run to display values
+    echo -e "${BLUE}Running $mode with values display:${NC}"
+    if [ "$SGX_ENABLED" -eq 1 ]; then
+        gramine-sgx $binary 1
+    else
+        $binary 1
+    fi
+    echo "--------------------------------------------"
+
     # Warm-up runs
     echo -e "${BLUE}Running warm-up for $mode...${NC}"
     for ((i=1; i<=$WARMUP_ITERATIONS; i++))
     do
-        gramine-sgx $binary 1 > /dev/null 2>&1
+        if [ "$SGX_ENABLED" -eq 1 ]; then
+            gramine-sgx $binary 1 > /dev/null 2>&1
+        else
+            $binary 1 > /dev/null 2>&1
+        fi
     done
 
     # Actual benchmark with external timing
     echo -e "${BLUE}Running $mode benchmark...${NC}"
     start_time=$(date +%s.%N)
-    gramine-sgx $binary $ITERATIONS > /dev/null 2>&1
+    if [ "$SGX_ENABLED" -eq 1 ]; then
+        gramine-sgx $binary $ITERATIONS > /dev/null 2>&1
+    else
+        $binary $ITERATIONS > /dev/null 2>&1
+    fi
     end_time=$(date +%s.%N)
     duration=$(echo "$end_time - $start_time" | bc -l)
 

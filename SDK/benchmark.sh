@@ -62,4 +62,3 @@ run_benchmark "encrypt"
 run_benchmark "decrypt"
 
 echo -e "${YELLOW}Benchmark complete!${NC}"
-
