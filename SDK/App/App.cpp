@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::string mode = argv[1];
-    int iterations = (argc > 2) ? std::stoi(argv[2]) : 100;
+    int iterations = (argc > 2) ? std::stoi(argv[2]) : 10000;
     int polyDegree = (argc > 3) ? std::stoi(argv[3]) : 8192;
     double scale = (argc > 4) ? std::stod(argv[4]) : (1 << 30);
     int slots = polyDegree / 2;

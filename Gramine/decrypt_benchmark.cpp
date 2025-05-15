@@ -7,7 +7,7 @@ using namespace lbcrypto;
 using namespace std::chrono;
 
 int main(int argc, char* argv[]) {
-    int iterations = (argc > 1) ? std::stoi(argv[1]) : 100; // Default to 100 if not provided
+    int iterations = (argc > 1) ? std::stoi(argv[1]) : 10000; // Default to 10000 if not provided
     std::cout << "Running decryption benchmark for " << iterations << " iterations..." << std::endl;
 
     // Setup parameters similar to the custom CKKS implementation

@@ -3,7 +3,7 @@
 # Combined OpenFHE with Gramine Benchmark Script
 # Usage: ./benchmark_openfhe.sh [iterations]
 
-ITERATIONS=${1:-100}
+ITERATIONS=${1:-10000}
 WARMUP_ITERATIONS=5
 
 # Colors for output

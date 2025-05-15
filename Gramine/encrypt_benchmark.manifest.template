@@ -4,7 +4,7 @@ libos.entrypoint = "/encrypt_benchmark"
 
 loader.insecure__use_cmdline_argv = true
 
-loader.log_level = "{{ log_level }}"
+loader.log_level = "error"
 
 loader.env.LD_LIBRARY_PATH = "/lib:/usr/lib:{{ arch_libdir }}:/usr/{{ arch_libdir }}:/usr/local/lib"
 
@@ -21,7 +21,7 @@ fs.mounts = [
 ]
 
 # SGX specific settings
-sgx.debug = true
+sgx.debug = false
 sgx.edmm_enable = {{ 'true' if env.get('EDMM', '0') == '1' else 'false' }}
 sgx.enclave_size = "2G"
 sgx.max_threads = 16
